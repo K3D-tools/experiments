@@ -3,7 +3,7 @@ from itertools import product
 import k3d
 
 
-def Dodecahedron(origin):
+def Dodecahedron(origin, size=1):
     
     origin = np.array(origin, dtype=np.float32)
     
@@ -13,7 +13,7 @@ def Dodecahedron(origin):
         dodecahedron_vertices += [(0,fi,1/fi),(0,-fi,1/fi),(0,-fi,-1/fi),(0,fi,-1/fi),
                    (1/fi,0,fi),(-1/fi,0,fi),(-1/fi,0,-fi),(1/fi,0,-fi),
                    (fi,1/fi,0),(-fi,1/fi,0),(-fi,-1/fi,0),(fi,-1/fi,0)]
-        dodecahedron_vertices = np.array(dodecahedron_vertices, dtype=np.float32) + origin
+        dodecahedron_vertices = np.float32(size*np.array(dodecahedron_vertices) + origin)
         
         dodecahedron_vertices = k3d.points(dodecahedron_vertices, point_size=0.1, visible=False)
         indices = [0,1,18, 0,1,10, 1,9,10, 0,10,14, 10,14,15, 4,10,15, 4,9,10, 4,5,9, 4,5,19, 4,15,19, 6,15,19, 6,16,19,
@@ -27,12 +27,13 @@ def Dodecahedron(origin):
     return [dodecahedron_vertices, dodecahedron_mesh]
 
 
-def Cube(origin):
+def Cube(origin, size=1):
+    
     if np.shape(origin) == (3,):
         cube_vertices = np.array(list(product([1,-1], [1, -1], [1, -1])), np.float32)
         cube_vertices = k3d.points(positions=cube_vertices, point_size=0.1)
 
-        cube_vertices.positions = cube_vertices.positions + np.array(origin, np.float32)
+        cube_vertices.positions = np.float32(size*cube_vertices.positions + np.array(origin))
         
         cube_mesh = k3d.mesh(cube_vertices.positions, indices=[0,1,2, 1,2,3, 0,1,4, 1,4,5, 1,3,5, 3,5,7, 
                                         0,2,4, 2,4,6, 2,3,7, 2,6,7, 4,5,6, 5,6,7])
@@ -43,17 +44,16 @@ def Cube(origin):
     return [cube_vertices, cube_mesh]
 
 
-def Icosahedron(origin):
+def Icosahedron(origin, size=1):
 
     if np.shape(origin) == (3,):
-        a = 1
-        fi = (a + np.sqrt(5))/2
-        icosahedron_vertices = k3d.points([(a,fi,0), (a,-fi,0), (-a,fi,0), (-a,-fi,0),
-                                           (fi,0,a), (fi,0,-a), (-fi,0,a), (-fi,0,-a),
-                                           (0,a,fi), (0,a,-fi), (0,-a,fi), (0,-a,-fi)],
+        fi = (1 + np.sqrt(5))/2
+        icosahedron_vertices = k3d.points([(1,fi,0), (1,-fi,0), (-1,fi,0), (-1,-fi,0),
+                                           (fi,0,1), (fi,0,-1), (-fi,0,1), (-fi,0,-1),
+                                           (0,1,fi), (0,1,-fi), (0,-1,fi), (0,-1,-fi)],
                                           point_size=0.1)
 
-        icosahedron_vertices.positions = icosahedron_vertices.positions + np.array(origin, np.float32)
+        icosahedron_vertices.positions = np.float32(size*np.array(icosahedron_vertices.positions) + np.array(origin))
 
         icosahedron_mesh = k3d.mesh(icosahedron_vertices.positions, indices=[0,2,8, 0,4,8, 0,2,9, 0,5,9, 2,6,8,
                                                                              2,7,9, 2,6,7, 0,4,5, 1,4,5, 1,5,11,
@@ -65,11 +65,11 @@ def Icosahedron(origin):
     return [icosahedron_vertices, icosahedron_mesh]
 
 
-def Octahedron(origin):
+def Octahedron(origin, size=1):
     
     if np.shape(origin) == (3,):
         octahedron_vertices = k3d.points([(1,0,0),(0,1,0),(0,0,1),(-1,0,0),(0,-1,0),(0,0,-1)], point_size=0.1)
-        octahedron_vertices.positions = octahedron_vertices.positions + np.array(origin, np.float32)
+        octahedron_vertices.positions = np.float32(size*np.array(octahedron_vertices.positions) + np.array(origin))
         
         octahedron_mesh = k3d.mesh(octahedron_vertices.positions, indices=[0,1,2, 0,1,5, 1,2,3, 1,3,5, 
                                                                            0,4,5, 0,2,4, 2,3,4, 3,4,5])
@@ -80,11 +80,11 @@ def Octahedron(origin):
 
 
 
-def Tetrahedron(origin):
+def Tetrahedron(origin, size=1):
     
     if np.shape(origin) == (3,):
         tetrahedron_vertices = k3d.points(positions=[(1, 1, 1),(1, -1, -1),(-1, 1, -1),(-1, -1, 1)], point_size=0.1)
-        tetrahedron_vertices.positions = tetrahedron_vertices.positions + np.array(origin, np.float32)
+        tetrahedron_vertices.positions = np.float32(size*np.array(tetrahedron_vertices.positions) + np.array(origin, np.float32))
         
         tetrahedron_mesh = k3d.mesh(tetrahedron_vertices.positions, indices=[0,1,2, 0,1,3, 1,2,3, 0,2,3])
         
